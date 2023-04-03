@@ -1,17 +1,18 @@
 /*
  * @Author: Martin martin-yin@foxmail.com
  * @Date: 2023-04-02 17:56:59
- * @LastEditors: Martin martin-yin@foxmail.com
- * @LastEditTime: 2023-04-02 22:27:52
- * @FilePath: \eno-code-analyse\src\parse\index.ts
+ * @LastEditors: 尹县伟
+ * @LastEditTime: 2023-04
+ * @FilePath: \eno-code-analyse-main\src\parse\index.ts
  * @Description:
  *
  */
+import fs from 'node:fs';
 import path from 'node:path';
 
 import vueCompiler from '@vue/compiler-dom';
 import md5 from 'js-md5';
-import tsCompiler from 'typescript';
+import ts from 'typescript';
 
 import { getFileContent, writeFile } from '../utils';
 
@@ -20,12 +21,15 @@ import { getFileContent, writeFile } from '../utils';
  * @param fileName
  * @returns
  */
-export function parseTsAndJs(fileName: string) {
-  const program = tsCompiler.createProgram([fileName], {});
-  const ast = program.getSourceFile(fileName);
-  const checker = program.getTypeChecker();
+export function parseTsAndJs(fileName: string): ts.Node {
+  const tsNode = ts.createSourceFile(
+    fileName,
+    fs.readFileSync(fileName).toString(),
+    ts.ScriptTarget.ESNext,
+    /*setParentNodes*/ true
+  );
 
-  return { ast, checker };
+  return tsNode;
 }
 
 /**
@@ -33,17 +37,15 @@ export function parseTsAndJs(fileName: string) {
  * @param fileName
  * @returns
  */
-export function parseVue(fileName: string) {
+export function parseVue(fileName: string): ts.Node {
   const vueCode = getFileContent(fileName);
   const result = vueCompiler.parse(vueCode);
   const children = result.children;
   let tsCode = '';
-  let baseLine = 0;
 
   children.forEach((element: any) => {
     if (element?.tag == 'script') {
       tsCode = element.children[0].content;
-      baseLine = element.loc.start.line - 1;
     }
   });
   // 将ts片段写入临时目录下的ts文件中
@@ -51,9 +53,12 @@ export function parseVue(fileName: string) {
 
   writeFile(tsCode, vueTempTsFile);
   // 将ts代码转化为AST
-  const program = tsCompiler.createProgram([vueTempTsFile], {});
-  const ast = program.getSourceFile(vueTempTsFile);
-  const checker = program.getTypeChecker();
+  const tsNode = ts.createSourceFile(
+    fileName,
+    fs.readFileSync(fileName).toString(),
+    ts.ScriptTarget.ESNext,
+    /*setParentNodes*/ true
+  );
 
-  return { ast, checker, baseLine };
+  return tsNode;
 }

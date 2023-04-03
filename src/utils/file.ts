@@ -8,7 +8,6 @@
  *
  */
 import fs from 'node:fs'; // 文件操作
-import path from 'node:path'; // 路径操作
 
 /**
  * 读取文件内容
