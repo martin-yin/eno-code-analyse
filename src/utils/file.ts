@@ -36,3 +36,12 @@ export function writeFile(content: string, fileName: string) {
     throw e;
   }
 }
+
+/**
+ * 获取文件后缀名
+ * @param file string
+ * @returns string
+ */
+export function getFileExtension(file: string): string {
+  return file.substring(file.lastIndexOf('.') + 1);
+}

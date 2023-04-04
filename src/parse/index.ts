@@ -12,6 +12,7 @@ import path from 'node:path';
 
 import vueCompiler from '@vue/compiler-dom';
 import md5 from 'js-md5';
+import type { SourceFile } from 'typescript';
 import ts from 'typescript';
 
 import { getFileContent, writeFile } from '../utils';
@@ -21,15 +22,13 @@ import { getFileContent, writeFile } from '../utils';
  * @param fileName
  * @returns
  */
-export function parseTsAndJs(fileName: string): ts.Node {
-  const tsNode = ts.createSourceFile(
+export function parseTsAndJs(fileName: string): SourceFile {
+  return ts.createSourceFile(
     fileName,
     fs.readFileSync(fileName).toString(),
     ts.ScriptTarget.ESNext,
     /*setParentNodes*/ true
   );
-
-  return tsNode;
 }
 
 /**
@@ -37,7 +36,7 @@ export function parseTsAndJs(fileName: string): ts.Node {
  * @param fileName
  * @returns
  */
-export function parseVue(fileName: string): ts.Node {
+export function parseVue(fileName: string): SourceFile {
   const vueCode = getFileContent(fileName);
   const result = vueCompiler.parse(vueCode);
   const children = result.children;
