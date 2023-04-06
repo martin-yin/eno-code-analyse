@@ -2,28 +2,43 @@
   "name": "eno-code-analyse",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "build:watch": "tsup --watch"
+    "watch": "tsup --watch",
+    "build": "tsup",
+    "build:plugins": "tsup --config build.plugin.ts"
+  },
+  "bin": {
+    "code-analyse": "bin/index.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@vue/compiler-dom": "^3.2.47",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
     "@vitest/ui": "^0.28.5",
+    "@vue/compiler-dom": "^3.2.47",
     "eslint": "^8.35.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-simple-import-sort": "^10.0.0",
+    "fast-glob": "^3.2.12",
     "js-md5": "^0.7.3",
     "prettier": "^2.8.7",
     "tsup": "^6.7.0",
-    "typescript": "^5.0.3"
+    "typescript": "^5.0.3",
+    "unconfig": "^0.3.7"
   },
   "devDependencies": {
     "@types/js-md5": "^0.7.0",
-    "@types/node": "^18.15.11"
+    "@types/lodash-es": "^4.17.7",
+    "@types/node": "^18.15.11",
+    "lodash-es": "^4.17.21"
   }
 }

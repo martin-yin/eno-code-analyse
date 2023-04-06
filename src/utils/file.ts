@@ -2,8 +2,8 @@
  * @Author: Martin martin-yin@foxmail.com
  * @Date: 2023-04-02 17:31:55
  * @LastEditors: Martin martin-yin@foxmail.com
- * @LastEditTime: 2023-04-02 22:27:47
- * @FilePath: \eno-code-analyse\src\utils\file.ts
+ * @LastEditTime: 2023-04
+ * @FilePath: \eno-code-analyse-main\src\utils\file.ts
  * @Description:
  *
  */

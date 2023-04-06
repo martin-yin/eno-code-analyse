@@ -1,7 +1,7 @@
 /*
  * @Author: Martin martin-yin@foxmail.com
  * @Date: 2023-04-02 17:56:59
- * @LastEditors: 尹县伟
+ * @LastEditors: Martin martin-yin@foxmail.com
  * @LastEditTime: 2023-04
  * @FilePath: \eno-code-analyse-main\src\parse\index.ts
  * @Description:

@@ -2,17 +2,18 @@
  * @Author: Martin martin-yin@foxmail.com
  * @Date: 2023-04-02 21:16:21
  * @LastEditors: Martin martin-yin@foxmail.com
- * @LastEditTime: 2023-04-04 22:19:50
- * @FilePath: \eno-code-analyse\src\plugins\plugin.ts
+ * @LastEditTime: 2023-04
+ * @FilePath: \eno-code-analyse-main\src\plugins\plugin.ts
  * @Description:
  *
  */
 import type { MaybePromise } from '../utils';
 
-/**
- * 抽象类
- */
 export interface PluginInterface {
+  new (options: any): PluginInstance;
+}
+
+export interface PluginInstance {
   name: string;
 
   startAnalyse(filePath: string): MaybePromise<void | boolean | any>;
@@ -23,9 +24,9 @@ export interface PluginInterface {
 }
 
 export class PluginContainer {
-  private plugins: PluginInterface[];
+  private plugins: PluginInstance[];
 
-  constructor(plugins: PluginInterface[]) {
+  constructor(plugins: PluginInstance[]) {
     this.plugins = plugins;
   }
 
@@ -38,11 +39,19 @@ export class PluginContainer {
   }
 
   public async format() {
+    const foramtResulst = [];
+
     for (const plugin of this.plugins) {
       if (plugin.format) {
         // 每个插件自己去格式化数据
-        console.log(await plugin.format());
+        const name = plugin.name;
+
+        foramtResulst.push({
+          [name]: await plugin.format()
+        });
       }
     }
+
+    return foramtResulst;
   }
 }
