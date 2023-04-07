@@ -3,11 +3,12 @@
  * @Date: 2023-04-02 17:31:55
  * @LastEditors: Martin martin-yin@foxmail.com
  * @LastEditTime: 2023-04
- * @FilePath: \eno-code-analyse-main\src\utils\file.ts
+ * @FilePath: \eno-code-analyse\src\utils\file.ts
  * @Description:
  *
  */
 import fs from 'node:fs'; // 文件操作
+import path from 'node:path';
 
 /**
  * 读取文件内容
@@ -29,16 +30,26 @@ export function getFileContent(fileName: string) {
  * @param content string
  * @param fileName string
  */
-export function writeFile(content: string, fileName: string) {
+export function writeFile(directory: string, fileName: string, content: string) {
   try {
-    fs.writeFileSync(fileName, content, 'utf-8');
+    const filePath = path.join(directory, fileName);
+
+    if (!fs.existsSync(directory)) {
+      fs.mkdirSync(directory);
+    }
+
+    fs.writeFileSync(filePath, content, {
+      flag: 'a'
+    });
+
+    return filePath;
   } catch (e) {
     throw e;
   }
 }
 
 /**
- * 获取文件后缀名
+ * @description 获取文件后缀名
  * @param file string
  * @returns string
  */

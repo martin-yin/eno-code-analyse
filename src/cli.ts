@@ -1,27 +1,16 @@
-/*
- * @Author: Martin martin-yin@foxmail.com
- * @Date: 2023-04-06 13:35:02
- * @LastEditors: Martin martin-yin@foxmail.com
- * @LastEditTime: 2023-04-06 21:40:34
- * @FilePath: \eno-code-analyse\src\cli.ts
- * @Description:
- *
- */
-import { writeFileSync } from 'node:fs';
-
 import cac from 'cac';
-import fg from 'fast-glob';
 
 import { version } from '../package.json';
-import { formatAnalyse, startAnalyse } from './analyse';
+import { startAnalyse } from './analyse';
 import { loadConfig } from './config';
-import { PluginContainer } from './plugins/plugin';
+import { getRemoteConfigPath } from './utils/remoteConfig';
 
 const VERSION = version as string;
 const cli = cac('code-analyse');
 
 type Options = {
-  config: string;
+  remote?: string;
+  config?: string;
 };
 
 cli.help();
@@ -29,38 +18,23 @@ cli.version(VERSION);
 
 cli
   .command('start', '代码分析')
+  .option('-r, --remote <url>', `[string] 远程获取配置，cli 优先获取 --remote 的配置`)
   .option('-c, --config <file>', `[string] 配置文件地址`)
   .action(async (options: Options) => {
     const cwd = process.cwd();
 
+    if (options.remote) {
+      const configPath = await getRemoteConfigPath(options.remote);
+
+      options.config = configPath;
+    }
+
     const config = await loadConfig({
-      configPath: options.config,
-      cwd
-    });
-
-    const analyseFiles = fg.sync(config?.include, {
-      ignore: [...config?.exclude],
       cwd,
-      absolute: true
+      configPath: options.config ?? ''
     });
 
-    const plugins = config.plugins.map(plugin => {
-      const pluginConfig = config.pluginsConfig.find(plugin => plugin.name === plugin.name);
-
-      return new plugin(pluginConfig?.config);
-    });
-
-    const pluginContainer = new PluginContainer(plugins);
-
-    // 开始分析代码
-    startAnalyse(analyseFiles, pluginContainer);
-
-    // 拿到format 之后的结果
-    const formatResult = await formatAnalyse(pluginContainer);
-
-    writeFileSync(`${cwd}/report.json`, JSON.stringify(formatResult), {
-      flag: 'a'
-    });
+    startAnalyse(config);
   });
 
 cli.parse();

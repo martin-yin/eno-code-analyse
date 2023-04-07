@@ -3,7 +3,7 @@
  * @Date: 2023-04-02 21:16:21
  * @LastEditors: Martin martin-yin@foxmail.com
  * @LastEditTime: 2023-04
- * @FilePath: \eno-code-analyse-main\src\plugins\plugin.ts
+ * @FilePath: \eno-code-analyse\src\plugins\plugin.ts
  * @Description:
  *
  */
@@ -13,14 +13,23 @@ export interface PluginInterface {
   new (options: any): PluginInstance;
 }
 
+export type PluginConfig = {
+  name: string;
+  config: {
+    [key: string]: any;
+  };
+};
+
+export type FormatResult = {
+  [x: string]: any;
+};
+
 export interface PluginInstance {
   name: string;
 
   startAnalyse(filePath: string): MaybePromise<void | boolean | any>;
 
-  format(): MaybePromise<void | boolean | any>;
-
-  report(): MaybePromise<void | boolean | any>;
+  format(): MaybePromise<void | boolean | FormatResult>;
 }
 
 export class PluginContainer {
@@ -39,7 +48,7 @@ export class PluginContainer {
   }
 
   public async format() {
-    const foramtResulst = [];
+    const foramtResulst: Array<FormatResult> = [];
 
     for (const plugin of this.plugins) {
       if (plugin.format) {

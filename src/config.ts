@@ -3,7 +3,7 @@
  * @Date: 2023-04-02 22:19:50
  * @LastEditors: Martin martin-yin@foxmail.com
  * @LastEditTime: 2023-04
- * @FilePath: \eno-code-analyse-main\src\config.ts
+ * @FilePath: \eno-code-analyse\src\config.ts
  * @Description:
  *
  */
@@ -13,23 +13,29 @@ import path from 'node:path';
 import { mergeWith } from 'lodash-es';
 import { createConfigLoader as createLoader } from 'unconfig';
 
-import type { PluginInterface } from './plugins/plugin';
+import type { PluginConfig, PluginInterface } from './plugins/plugin';
 
 export type ConfigType = {
-  appId: string;
-  reqUrl?: string;
+  appId?: string;
   reportUrl?: string;
   plugins: Array<PluginInterface>;
-  pluginsConfig: Array<{
-    name: string;
-    config: any;
-  }>;
-  include?: Array<string> | string;
+  pluginsConfig?: Array<PluginConfig>;
+  include: Array<string> | string;
   exclude?: Array<string> | string;
   beforeStart?: () => void;
   onSuccess?: () => void;
   onFail?: () => void;
 };
+
+export type LoadedConfigType = ConfigType &
+  Required<{
+    include: Array<string>;
+    exclude: Array<string>;
+    pluginsConfig: Array<{
+      name: string;
+      config: any;
+    }>;
+  }>;
 
 /**
  * @description 定义配置
@@ -41,16 +47,11 @@ export function defineConfig(config: ConfigType): ConfigType {
 
 const defaultConfig = Object.freeze({
   include: [],
-  exclude: ['**/node_modules/**', '**/.git/**']
+  exclude: ['**/node_modules/**', '**/.git/**'],
+  pluginsConfig: []
 });
 
-export async function loadConfig(options: { cwd: string; configPath?: string }): Promise<
-  ConfigType &
-    Required<{
-      include: Array<string>;
-      exclude: Array<string>;
-    }>
-> {
+export async function loadConfig(options: { cwd: string; configPath?: string }): Promise<LoadedConfigType> {
   const resolved = path.resolve(options.cwd, options.configPath || '');
 
   if (fs.existsSync(resolved) && fs.statSync(resolved).isFile()) {

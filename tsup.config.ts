@@ -2,8 +2,8 @@
  * @Author: Martin martin-yin@foxmail.com
  * @Date: 2023-04-02 16:14:29
  * @LastEditors: Martin martin-yin@foxmail.com
- * @LastEditTime: 2023-04
- * @FilePath: \eno-code-analyse-main\tsup.config.ts
+ * @LastEditTime: 2023-04-07 22:07:54
+ * @FilePath: \eno-code-analyse\tsup.config.ts
  * @Description: 构建使用的 tsup 配置文件
  */
 

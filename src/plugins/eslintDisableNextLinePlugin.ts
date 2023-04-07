@@ -1,17 +1,8 @@
-/*
- * @Author: Martin martin-yin@foxmail.com
- * @Date: 2023-04-06 11:15:12
- * @LastEditors: Martin martin-yin@foxmail.com
- * @LastEditTime: 2023-04-06 21:40:15
- * @FilePath: \eno-code-analyse\src\plugins\eslintDisableNextLinePlugin.ts
- * @Description:
- *
- */
 import fs from 'node:fs';
 
 import type { PluginInstance } from './plugin';
 
-export class EslintDisableNextLinePlugin implements PluginInstance {
+export default class EslintDisableNextLinePlugin implements PluginInstance {
   name = 'EslintDisableNextLinePlugin';
 
   private context: RegExpMatchArray | Array<string> = [];
@@ -20,7 +11,7 @@ export class EslintDisableNextLinePlugin implements PluginInstance {
     throw new Error('Method not implemented.');
   }
 
-  startAnalyse(_orginFileName: any) {
+  startAnalyse(_orginFileName: string) {
     const comments = this.getESLintDisableCommentsFromFile(_orginFileName) as any;
 
     this.context = [...this.context, ...comments];
@@ -30,13 +21,6 @@ export class EslintDisableNextLinePlugin implements PluginInstance {
     return this.countOccurrences(this.context as any);
   }
 
-  report() {
-    return false;
-  }
-
-  /**
-   *
-   */
   private getESLintDisableCommentsFromFile(_orginFileName: string) {
     const fileContent = fs.readFileSync(_orginFileName, { encoding: 'utf-8' });
     const regex = /\/\/\s*eslint-disable-next-line\s.*$/gm;

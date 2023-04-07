@@ -126,7 +126,7 @@ export function getMethodComments(
   return methdoComments;
 }
 
-export class MethodCommentsPlugin implements PluginInstance {
+export default class MethodCommentsPlugin implements PluginInstance {
   name = 'MethodCommentsPlugin';
 
   private extensions: Array<string> = ['jsx', 'js', 'ts', 'tsx', 'vue'];
@@ -289,9 +289,5 @@ export class MethodCommentsPlugin implements PluginInstance {
     });
 
     return fileAnalyseMessage;
-  }
-
-  report() {
-    return false;
   }
 }
