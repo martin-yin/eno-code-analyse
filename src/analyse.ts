@@ -1,3 +1,12 @@
+/*
+ * @Author: Martin martin-yin@foxmail.com
+ * @Date: 2023-04-06 14:10:20
+ * @LastEditors: Martin martin-yin@foxmail.com
+ * @LastEditTime: 2023-04-09 17:59:18
+ * @FilePath: \eno-code-analyse\src\analyse.ts
+ * @Description:
+ *
+ */
 import fg from 'fast-glob';
 
 import type { LoadedConfigType } from './config';
@@ -25,11 +34,11 @@ export async function startAnalyse(config: LoadedConfigType) {
   // 拿到format 之后的结果
   const formatResult = await formatAnalyse(pluginContainer);
 
-  if (config.reportUrl) {
-    // 调用接口上报数据
-  } else {
-    writeFile(cwd, 'report.json', JSON.stringify(formatResult));
-  }
+  // if (config.reportUrl) {
+  //   // 调用接口上报数据
+  // } else {
+  writeFile(cwd, 'report.json', JSON.stringify(formatResult));
+  // }
 }
 
 /**
