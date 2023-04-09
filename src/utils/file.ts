@@ -39,7 +39,7 @@ export function writeFile(directory: string, fileName: string, content: string) 
     }
 
     fs.writeFileSync(filePath, content, {
-      flag: 'a'
+      flag: 'w'
     });
 
     return filePath;
