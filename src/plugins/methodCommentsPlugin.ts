@@ -135,7 +135,6 @@ export default class MethodCommentsPlugin implements PluginInstance {
 
   constructor(config?: any) {
     // this.extensions = config?.extensions;
-    console.log(config, 'config');
   }
 
   startAnalyse(filePath: string): void {

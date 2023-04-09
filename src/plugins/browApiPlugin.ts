@@ -17,9 +17,7 @@ export class BrowApiPluginPlugin implements PluginInstance {
     throw new Error('Method not implemented.');
   }
 
-  startAnalyse(_orginFileName: any) {
-    console.log(_orginFileName);
-  }
+  startAnalyse(_orginFileName: any) {}
 
   format() {
     return this.context;
