@@ -8,8 +8,8 @@
  *
  */
 
-import MethodCommentsPlugin from './methodCommentsPlugin';
 import EslintDisableNextLinePlugin from './eslintDisableNextLinePlugin';
+import MethodCommentsPlugin from './methodCommentsPlugin';
 import type { PluginInstance } from './plugin';
 
 export { MethodCommentsPlugin, EslintDisableNextLinePlugin };
