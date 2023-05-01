@@ -27,7 +27,7 @@ export type FormatResult = {
 export interface PluginInstance {
   name: string;
 
-  startAnalyse(filePath: string): MaybePromise<void | boolean | any>;
+  startAnalyse(_orginFileName: string): MaybePromise<void | boolean | any>;
 
   format(): MaybePromise<void | boolean | FormatResult>;
 }
@@ -39,10 +39,10 @@ export class PluginContainer {
     this.plugins = plugins;
   }
 
-  public async startAnalyse(filePath: string) {
+  public async startAnalyse(_orginFileName: string) {
     for (const plugin of this.plugins) {
       if (plugin.startAnalyse) {
-        await plugin.startAnalyse(filePath);
+        await plugin.startAnalyse(_orginFileName);
       }
     }
   }

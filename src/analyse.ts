@@ -19,10 +19,9 @@ import { writeFile } from './utils';
  * @param config
  * @returns void
  */
-export async function startAnalyse(config: LoadedConfigType) {
-  const cwd = process.cwd();
-
+export async function startAnalyse(cwd: string, config: LoadedConfigType) {
   const analyseFiles = getBeAnalyseFiles(cwd, config.include, config.exclude);
+
   const plugins = initPlugins(config.plugins, config.pluginsConfig);
   const pluginContainer = new PluginContainer(plugins);
 
@@ -34,17 +33,17 @@ export async function startAnalyse(config: LoadedConfigType) {
   // 拿到format 之后的结果
   const formatResult = await formatAnalyse(pluginContainer);
 
-  // if (config.reportUrl) {
-  //   // 调用接口上报数据
-  // } else {
-  writeFile(cwd, 'report.json', JSON.stringify(formatResult));
-  // }
+  if (config.reportUrl) {
+    // 调用接口上报数据
+  } else {
+    writeFile(cwd, 'report.json', JSON.stringify(formatResult));
+  }
 }
 
 /**
  * @description 执行格式化
  * @param {PluginContainer} pluginContainer
- * @returns {Promise<any>}
+ * @returns {Promise<FormatResult[]>}
  */
 export async function formatAnalyse(pluginContainer: PluginContainer): Promise<FormatResult[]> {
   return pluginContainer.format();

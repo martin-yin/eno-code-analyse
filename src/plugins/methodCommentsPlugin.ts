@@ -249,10 +249,6 @@ export default class MethodCommentsPlugin implements PluginInstance {
           message.push(`函数缺少描述信息`);
         }
 
-        if (params.length !== comments.params.length) {
-          message.push(`函数参数个数与注释信息中参数个数无法对应`);
-        }
-
         params.forEach(param => {
           const commentParam = comments.params.find(commentParam => param.escapedText === commentParam.escapedText);
 
